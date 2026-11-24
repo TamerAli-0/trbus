@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin.html
+
+# Replace with the real address once the site has its domain.
+Sitemap: https://www.example.com/sitemap.xml

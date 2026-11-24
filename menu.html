@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="tr" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Menü — Tarbuş Restaurant</title>
+  <meta name="description" content="Antakya mutfağı menüsü: mezeler, kebaplar, tatlılar, içecekler — Tarbuş Restaurant">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Manrope:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/base.css?v=25">
+  <link rel="stylesheet" href="css/menu.css?v=25">
+  <script src="https://unpkg.com/lucide@1.73.0/dist/umd/lucide.min.js"></script>
+  <script src="js/menu-data.js?v=25"></script>
+  <script src="js/menu-text.js?v=25"></script>
+  <script src="js/i18n.js?v=25"></script>
+  <script src="js/store.js?v=25"></script>
+  <script src="js/ui.js?v=25"></script>
+  <script src="js/order.js?v=25"></script>
+  <script src="js/order-card.js?v=25"></script>
+</head>
+<body>
+  <a class="skip-link" href="#menu-content" data-i18n="menu.skip">Menüye geç</a>
+
+  <!-- Sticky top bar -->
+  <header class="menu-bar" id="menu-bar">
+    <div class="menu-bar__inner">
+      <a href="index.html" class="brand" aria-label="Tarbuş">
+        <img src="assets/brand/tarbus-logo.png" alt="Tarbuş" width="120" height="44" loading="eager">
+      </a>
+      <div class="menu-bar__actions">
+        <div id="lang-mount"></div>
+        <button type="button" class="icon-btn" id="search-toggle" aria-label="Ara" data-i18n-attr="aria-label:menu.search">
+          <i data-lucide="search"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search bar (expandable) -->
+    <div class="search-bar" id="search-bar" hidden>
+      <div class="search-bar__inner">
+        <i data-lucide="search" class="search-bar__icon"></i>
+        <input type="search" id="search-input" class="search-bar__input" autocomplete="off" spellcheck="false"
+               data-i18n-attr="placeholder:menu.searchPlaceholder">
+        <button type="button" class="search-bar__clear" id="search-clear" hidden aria-label="Temizle">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Category chip rail + filters -->
+    <nav class="chip-rail" id="chip-rail" aria-label="Kategoriler">
+      <div class="chip-rail__scroll" id="chip-scroll">
+        <!-- Filter chips -->
+        <button type="button" class="chip filter-chip" data-filter="veg" aria-pressed="false">
+          <i data-lucide="leaf"></i>
+          <span data-i18n="filter.veg">Vejetaryen</span>
+        </button>
+        <button type="button" class="chip filter-chip" data-filter="signature" aria-pressed="false">
+          <i data-lucide="crown"></i>
+          <span data-i18n="filter.signature">İmza</span>
+        </button>
+        <span class="chip-rail__sep" aria-hidden="true"></span>
+        <!-- Category chips rendered by JS -->
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main content area -->
+  <div class="menu-layout" id="menu-content">
+    <!-- Desktop sidebar (hidden on phone) -->
+    <aside class="menu-sidebar" id="menu-sidebar" aria-label="Kategoriler">
+      <nav class="sidebar-nav" id="sidebar-nav">
+        <!-- Rendered by JS -->
+      </nav>
+    </aside>
+
+    <!-- Scrollable menu body -->
+    <main class="menu-main" id="menu-main">
+      <!-- Sections rendered by JS -->
+      <!-- Empty search state -->
+      <div class="empty-state" id="empty-state" hidden>
+        <i data-lucide="search-x"></i>
+        <p data-i18n="menu.noResults">Bir şey bulunamadı</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- Item detail bottom sheet -->
+  <div class="scrim" id="detail-scrim" aria-hidden="true"></div>
+  <div class="sheet" id="detail-sheet" role="dialog" aria-modal="true" aria-labelledby="detail-title" tabindex="-1">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet__body" id="detail-body">
+      <!-- Filled by JS on item tap -->
+    </div>
+  </div>
+
+  <!-- Dish list: bottom bar and panel -->
+  <button type="button" class="order-bar" id="order-bar" aria-controls="order-sheet" aria-expanded="false" hidden>
+    <span class="order-bar__count" id="order-bar-count">0</span>
+    <span class="order-bar__text">
+      <span class="order-bar__label" data-i18n="order.title">Listem</span>
+      <span class="order-bar__total" id="order-bar-total"></span>
+    </span>
+    <span class="order-bar__cta"><span data-i18n="order.view">Listeyi gör</span><i data-lucide="chevron-up"></i></span>
+  </button>
+
+  <div class="scrim" id="order-scrim" aria-hidden="true"></div>
+  <div class="sheet order-sheet" id="order-sheet" role="dialog" aria-modal="true" aria-labelledby="order-title" tabindex="-1">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="order-sheet__head">
+      <h2 class="order-sheet__title" id="order-title" data-i18n="order.title">Listem</h2>
+      <button type="button" class="icon-btn" id="order-close" data-i18n-attr="aria-label:menu.close" aria-label="Kapat"><i data-lucide="x"></i></button>
+    </div>
+    <div class="order-sheet__body" id="order-body"></div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="menu-footer" id="menu-footer">
+    <div class="menu-footer__inner">
+      <div class="menu-footer__brand">
+        <img src="assets/brand/tarbus-logo.png" alt="Tarbuş" width="100" height="37" loading="lazy">
+        <p class="menu-footer__tagline" data-i18n="brand.tagline">Antakya sofrası</p>
+      </div>
+      <div class="menu-footer__info">
+        <div class="menu-footer__row">
+          <i data-lucide="clock"></i>
+          <span id="footer-hours"></span>
+        </div>
+        <div class="menu-footer__row">
+          <i data-lucide="message-circle"></i>
+          <a id="footer-phone" href="" dir="ltr"></a>
+        </div>
+        <div class="menu-footer__row">
+          <i data-lucide="map-pin"></i>
+          <a id="footer-address" href="index.html#visit"></a>
+        </div>
+      </div>
+      <a href="index.html" class="btn btn-ghost btn-sm menu-footer__home">
+        <i data-lucide="arrow-left"></i>
+        <span data-i18n="nav.home">Ana sayfa</span>
+      </a>
+    </div>
+  </footer>
+
+  <script src="js/menu.js?v=25"></script>
+</body>
+</html>
